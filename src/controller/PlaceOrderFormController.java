@@ -3,10 +3,7 @@ package controller;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import dao.CustomerDaoImpl;
-import dao.ItemDaoImpl;
-import dao.OrderDaoImpl;
-import dao.OrderDetailDaoImpl;
+import dao.*;
 import db.DBConnection;
 import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -41,10 +38,10 @@ import java.util.stream.Collectors;
  **/
 
 public class PlaceOrderFormController {
-    OrderDaoImpl orderDao = new OrderDaoImpl();
-    OrderDetailDaoImpl orderDetailDao = new OrderDetailDaoImpl();
-    CustomerDaoImpl customerDao = new CustomerDaoImpl();
-    ItemDaoImpl itemDao = new ItemDaoImpl();
+    OrderDAO orderDao = new OrderDaoImpl();
+    OrderDetailDAO orderDetailDao = new OrderDetailDaoImpl();
+    CustomerDAO customerDao = new CustomerDaoImpl();
+    ItemDAO itemDao = new ItemDaoImpl();
 
     public AnchorPane root;
     public JFXButton btnPlaceOrder;
