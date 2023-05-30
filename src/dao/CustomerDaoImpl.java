@@ -2,17 +2,17 @@ package dao;
 
 import db.DBConnection;
 import model.CustomerDTO;
+import utill.SQLUtill;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class CustomerDaoImpl {
+public class CustomerDaoImpl implements CustomerDAO{
 
     public ArrayList<CustomerDTO> loadAllCustomer() throws SQLException, ClassNotFoundException {
         ArrayList<CustomerDTO> allCustomers = new ArrayList<>();
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        Statement stm = connection.createStatement();
-        ResultSet rst = stm.executeQuery("SELECT * FROM Customer");
+
+        ResultSet rst = SQLUtill.execute("SELECT * FROM Customer");
 
         while (rst.next()) {
             CustomerDTO customerDTO = new CustomerDTO(rst.getString(1),rst.getString(2),rst.getString(3));
@@ -22,40 +22,24 @@ public class CustomerDaoImpl {
     }
 
     public void saveCustomer(CustomerDTO customerDTO) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement pstm = connection.prepareStatement("INSERT INTO Customer (id,name, address) VALUES (?,?,?)");
-        pstm.setString(1, customerDTO.getId());
-        pstm.setString(2, customerDTO.getName());
-        pstm.setString(3, customerDTO.getAddress());
-        pstm.executeUpdate();
+        SQLUtill.execute("INSERT INTO Customer (id,name, address) VALUES (?,?,?)",customerDTO.getId(),customerDTO.getName(),customerDTO.getAddress());
     }
 
     public void updateCustomer(String id, String name, String address) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement pstm = connection.prepareStatement("UPDATE Customer SET name=?, address=? WHERE id=?");
-        pstm.setString(1, name);
-        pstm.setString(2, address);
-        pstm.setString(3, id);
-        pstm.executeUpdate();
+        SQLUtill.execute("UPDATE Customer SET name=?, address=? WHERE id=?",name,address,id);
     }
 
     public boolean isExistCustomer(String id) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement pstm = connection.prepareStatement("SELECT id FROM Customer WHERE id=?");
-        pstm.setString(1, id);
-        return pstm.executeQuery().next();
+        ResultSet rst = SQLUtill.execute("SELECT id FROM Customer WHERE id=?",id);
+        return rst.next();
     }
 
     public void deleteCustomer(String id) throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        PreparedStatement pstm = connection.prepareStatement("DELETE FROM Customer WHERE id=?");
-        pstm.setString(1, id);
-        pstm.executeUpdate();
+        SQLUtill.execute("DELETE FROM Customer WHERE id=?",id);
     }
 
     public String genarateNewId() throws SQLException, ClassNotFoundException {
-        Connection connection = DBConnection.getDbConnection().getConnection();
-        ResultSet rst = connection.createStatement().executeQuery("SELECT id FROM Customer ORDER BY id DESC LIMIT 1;");
+         ResultSet rst = SQLUtill.execute("SELECT id FROM Customer ORDER BY id DESC LIMIT 1;");
         if (rst.next()) {
             String id = rst.getString("id");
             int newCustomerId = Integer.parseInt(id.replace("C00-", "")) + 1;
@@ -66,9 +50,7 @@ public class CustomerDaoImpl {
     }
 
     public CustomerDTO searchCustomer(String newValue) throws SQLException, ClassNotFoundException {
-        PreparedStatement pstm = DBConnection.getDbConnection().getConnection().prepareStatement("SELECT * FROM Customer WHERE id=?");
-        pstm.setString(1, newValue + "");
-        ResultSet rst = pstm.executeQuery();
+        ResultSet rst = SQLUtill.execute("SELECT * FROM Customer WHERE id=?",newValue + "");
         rst.next();
         return new CustomerDTO(newValue + "", rst.getString("name"), rst.getString("address"));
     }
