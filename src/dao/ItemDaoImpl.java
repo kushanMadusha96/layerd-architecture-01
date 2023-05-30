@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 
-public class ItemDaoImpl {
+public class ItemDaoImpl implements ItemDAO{
     public ArrayList<ItemDTO> getAllItems() throws SQLException, ClassNotFoundException {
         ArrayList<ItemDTO> itemList= new ArrayList<>();
         Connection connection = DBConnection.getDbConnection().getConnection();

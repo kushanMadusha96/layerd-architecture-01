@@ -2,6 +2,7 @@ package controller;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import dao.ItemDAO;
 import dao.ItemDaoImpl;
 import db.DBConnection;
 import javafx.application.Platform;
@@ -31,7 +32,7 @@ import java.util.ArrayList;
  **/
 
 public class ManageItemsFormController {
-    ItemDaoImpl itemDao = new ItemDaoImpl();
+    ItemDAO itemDao = new ItemDaoImpl();
 
     public AnchorPane root;
     public JFXTextField txtCode;
